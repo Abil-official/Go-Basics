@@ -1,15 +1,8 @@
 # Go-Basics
+Here i'll go thorugh the documentation of GoLang and create the basic project from documentation.
 
-Basics of GoLang
+# Project Commands
+* go run
+* go build
 
-# Run Project
 
-go run .
-
-# Build
-
-go build
-
-# Run Exe
-
-basics.exe
