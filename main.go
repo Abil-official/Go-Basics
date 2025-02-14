@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	connection "go/basics/database"
 	"go/basics/modules/greetings"
 	"log"
 )
@@ -24,8 +25,9 @@ func main() {
 	if er != nil {
 		log.Fatal(er)
 	}
+
 	// If no error was returned, print the returned message
 	// to the console.
 	fmt.Println(mess)
-
+	connection.ConnectDb()
 }
