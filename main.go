@@ -31,5 +31,6 @@ func main() {
 	// to the console.
 	fmt.Println(mess)
 	db := database.ConnectDB()
+	// Run migrations
 	fmt.Println("✅ Connected and migrated successfully!", db)
 }

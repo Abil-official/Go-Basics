@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"go/basics/database/migrations"
+	"go/basics/database/seeders"
 	"log"
 	"os"
 
@@ -42,6 +43,6 @@ func ConnectDB() *gorm.DB {
 
 	// Run migrations
 	migrations.RunMigrations(db)
-
+	seeders.SeedUsers(db)
 	return db
 }
