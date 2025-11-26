@@ -1,41 +1,47 @@
-package connection
+package database
 
 import (
-	"database/sql"
 	"fmt"
+	"go/basics/database/migrations"
 	"log"
 	"os"
 
-	"github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var db *sql.DB
+// ConnectDB establishes the connection and runs migrations
+func ConnectDB() *gorm.DB {
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 
-func ConnectDb() {
-	// Load .env file
-	e := godotenv.Load()
-	if e != nil {
-		log.Fatal("Error loading .env file")
+	// Read values from environment
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
+	// ✅ Add client_encoding=UTF8 to DSN
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable client_encoding=UTF8 TimeZone=Asia/Kathmandu",
+		host, user, password, dbname, port,
+	)
+	if os.Getenv("APP_ENV") == "local" {
+		dsn += " client_encoding=UTF8"
 	}
-	// Capture connection properties.
-	cfg := mysql.Config{
-		User:   os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
-		Net:    "tcp",
-		Addr:   os.Getenv("ADDR"),
-		DBName: "jazz",
-	}
-	// Get a database handle.
-	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
+
+	// Connect to Postgres
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
-	fmt.Println("Connected!")
+	// Run migrations
+	migrations.RunMigrations(db)
+
+	return db
 }

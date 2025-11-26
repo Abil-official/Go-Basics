@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	connection "go/basics/database"
+	"go/basics/database"
 	"go/basics/modules/greetings"
 	"log"
 )
 
 func main() {
+
 	// Set properties of the predefined Logger, including
 	// the log entry prefix and a flag to disable printing
 	// the time, source file, and line number.
@@ -29,5 +30,6 @@ func main() {
 	// If no error was returned, print the returned message
 	// to the console.
 	fmt.Println(mess)
-	connection.ConnectDb()
+	db := database.ConnectDB()
+	fmt.Println("✅ Connected and migrated successfully!", db)
 }

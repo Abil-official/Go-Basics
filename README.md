@@ -10,5 +10,9 @@ Here i'll go through the documentation of GoLang and create the basic project fr
 <!-- To copy .env.example to .env -->
 - cp .env.example .env
   - Change the database in recently created .env
+  - go get -u gorm.io/gorm
+  - go get -u gorm.io/driver/postgres
+
 - go run
 - go build
+
